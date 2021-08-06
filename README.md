@@ -1,2 +1,2 @@
-# dockerreactjs
-.
+# Docker + ReactJS
+
