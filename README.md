@@ -25,14 +25,14 @@ sudo apt install npm
 2. Install react globally on Ubuntu.
 
 ```
-npm install -g create-react-app@3.4.1
+sudo npm install -g create-react-app@3.4.1
 ```
 3. Create [dockerfile](/Dockerfile)
 4. Create [dockerignore](/.dockerignore)
 5. Build and run dev version.
 
 ```
-docker build -t sample:dev
+docker build -t sample:dev .
 
 docker run \
     -it \
@@ -43,6 +43,35 @@ docker run \
     -e CHOKIDAR_USEPOLLING=true \
     sample:dev
 ```
+
+Note - the above Dockerfile as initially created doesn't work because of the following line:
+
+> COPY package.json ./
+
+Basically, we get an error saying that the package doesn't exist, and same for "package-lock.json" - so, we created files in the root directory with those titles (just blank files). These are presumably analogous to gemfiles or requirements.txt in python.
+
+After doing that, the build passed - however, we get:
+
+> The command '/bin/sh -c npm install --silent' returned a non-zero code: 1
+
+So, we removed "--silent" from the dockerfile as well as all references to it.  After doing so, the dockerfile moved forward.  However, we get another error, stating that the package.json files need to be in json format.
+
+After this point, the build seems to run, but we get the following package.json warnings:
+
+```
+npm WARN app No description
+npm WARN app No repository field.
+npm WARN app No license field.
+```
+Additionally, we get a number of deprecated package warnings, but ultimately the build is successful.
+
+After attempting to run the docker build command we get the following error:
+
+```
+npm ERR! missing script: start
+```
+
+
 6. If you want to use docker-compose...create docker-compose yml file.
 
 ```
