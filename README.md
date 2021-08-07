@@ -15,6 +15,81 @@
 
 In the case of Flask, - Flask is the framework, whereas Werkzeug is the Web Server Gateway Interface (WSGI), whereas the server may be Ngnix. In python, they use WSGI as an attempt to standardize things, whereas Node has everything architected directly in Javascript, custom for Node and there is no WSGI standard. Another example of an alternate WSGI in python is Gunicorn.
 
+### Installing React Globally
+
+1. Install NPM globally on Ubuntu.
+
+```
+sudo apt install npm
+```
+2. Install react globally on Ubuntu.
+
+```
+npm install -g create-react-app@3.4.1
+```
+3. Create [dockerfile](/Dockerfile)
+4. Create [dockerignore](/.dockerignore)
+5. Build and run dev version.
+
+```
+docker build -t sample:dev
+
+docker run \
+    -it \
+    --rm \
+    -v ${PWD}:/app \
+    -v /app/node_modules \
+    -p 3001:3000 \
+    -e CHOKIDAR_USEPOLLING=true \
+    sample:dev
+```
+6. If you want to use docker-compose...create docker-compose yml file.
+
+```
+version: '3.7'
+
+services:
+
+  sample:
+    container_name: sample
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - '.:/app'
+      - '/app/node_modules'
+    ports:
+      - 3001:3000
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+
+```
+7. Build with docker compose:
+
+```
+docker-compose up -d --build
+```
+8. Create prod dockerfile.
+
+9. Build prod dockerfile.
+
+```
+docker build -f Dockerfile.prod -t sample:prod .
+```
+
+10. Start prod container.
+
+```
+docker run -it --rm -p 1337:80 sample:prod
+```
+11. Create docker-compose prod yml.
+
+12. Run prod container with docker-compose
+
+```
+docker-compose -f docker-compose.prod.yml up -d --build
+```
+14. React Router
 
 # References
 
