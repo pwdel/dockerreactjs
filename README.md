@@ -15,6 +15,14 @@
 
 In the case of Flask, - Flask is the framework, whereas Werkzeug is the Web Server Gateway Interface (WSGI), whereas the server may be Ngnix. In python, they use WSGI as an attempt to standardize things, whereas Node has everything architected directly in Javascript, custom for Node and there is no WSGI standard. Another example of an alternate WSGI in python is Gunicorn.
 
+#### Another Side Note - Jinja vs. React
+
+React vs. Jinja for flask applications - why would you want to use React when you could just use Jinja?
+
+Jinja is a server-side template rendering engine while React is client-side.
+
+> Jinja makes sense when you can't do much on the client other than render pages. Nowadays clients, even on phones, can do a lot more than they used to. Therefore it makes sense to use that to improve the user experience. For example, you can check inputs as they are being typed or you can use controls to draw to canvas. All of these sorts of dynamic things can't be done with Jinja-rendered templates alone.
+
 ### Installing React Globally
 
 1. Install NPM globally on Ubuntu.
@@ -70,7 +78,59 @@ After attempting to run the docker build command we get the following error:
 ```
 npm ERR! missing script: start
 ```
+In a normal, non-docker environment, this error would come from missing a line in the package.json file, essentially a script which tells the application to start. In our example so far, our package.json file is completely blank.
 
+One quick observation while attempting to diagnose this is that having to run npm install AFTER modifying package.json is very time consuming. For the time being, to eliminate the long wait time between cycles, it might make more sense to order the Dockerfile like so, until we need to put actual dependencies together:
+
+```
+RUN npm install
+RUN npm install react-scripts@3.4.1 -g
+COPY package.json ./
+COPY package-lock.json ./
+```
+Once we have actual dependencies that we need to install, we could re-arrange the dockerfile with npm install after running COPY package.json.
+
+Once we modify package.json to include some reference to a script, the container seems to build properly, but since we don't have any actual script, we get:
+
+```
+Error: Cannot find module '/app/your-script.js'
+```
+To understand the basics of what kind of script would be needed to run something, we started a [node tutorial](/notes/nodejstutorial.md).
+
+After building a simple, runnable script and testing it on node without docker, we then run a build, having modified our package.json such that the start script points to app/main:
+
+```
+{
+  "scripts": {
+      "start": "app/main.js"
+  }
+}
+```
+We then get a permission denied error.  This appears to be a Docker problem, in which the file must be written as an executable, rather than a node problem. Essentially Docker is a linux environment (alpine) so we have to try something like the following:
+
+```
+RUN ["chmod", "+x", "executable.sh"]
+```
+Where executable.sh is a shell file that goes and starts the node file.  Note, the original line:
+
+```
+CMD ["npm", "start"]
+```
+..."start" refers to the start within the start package.json - "start": "app/main.js"
+
+On the other hand, this may be a node error, as [this stackoverflow thread](https://stackoverflow.com/questions/51811564/sh-1-node-permission-denied) seems to indicate that the solution seems to be to run npm under a root account.
+
+This stackoverflow exchange seems to indicate that [you can set up a temporary sudo user to execute npm installations, and there may be some caching issues to work thorough](https://stackoverflow.com/questions/21906419/dockerfile-npm-create-a-sudo-user-to-run-npm-install).
+
+
+```
+sh: app/main.js: Permission denied
+npm ERR! code ELIFECYCLE
+npm ERR! errno 126
+npm ERR! @ start: `app/main.js`
+npm ERR! Exit status 126
+
+```
 
 6. If you want to use docker-compose...create docker-compose yml file.
 
