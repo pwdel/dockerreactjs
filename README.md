@@ -120,8 +120,7 @@ CMD ["npm", "start"]
 
 On the other hand, this may be a node error, as [this stackoverflow thread](https://stackoverflow.com/questions/51811564/sh-1-node-permission-denied) seems to indicate that the solution seems to be to run npm under a root account.
 
-This stackoverflow exchange seems to indicate that [you can set up a temporary sudo user to execute npm installations, and there may be some caching issues to work thorough](https://stackoverflow.com/questions/21906419/dockerfile-npm-create-a-sudo-user-to-run-npm-install).
-
+This stackoverflow exchange seems to indicate that [you can set up a temporary sudo user to execute npm installations, and there may be some caching issues to work thorough](https://stackoverflow.com/questions/21906419/dockerfile-npm-create-a-sudo-user-to-run-npm-install). However after we try this direction, we get the same error.
 
 ```
 sh: app/main.js: Permission denied
@@ -131,6 +130,142 @@ npm ERR! @ start: `app/main.js`
 npm ERR! Exit status 126
 
 ```
+After doing some more Googling, it appears that we may actually have to build a React app and can't just start out quite as simply as creating a single node file at main.js.  We use command:
+
+```
+$ sudo npx create-react-app app
+```
+[npx](https://medium.com/@maybekatz/introducing-npx-an-npm-package-runner-55f7d4bd282b) is an npm package runner, so basically what we're doing is running a, "create-react-app" package.
+
+Note! Once this app is created, an additional [readme](/app/README.md) is created as well with various instructions on how to use and launch the application.
+
+The process of building the app through npx looks like the following:
+
+![reactappcreated](/img/reactappcreated.png)
+
+The folder structure which gets created looks like the following:
+
+![reactappcreated](/img/reactappcreated.png)
+
+Note, when you navigate to the appropriate project folder and run,
+
+You get the following terminal feedback:
+
+```
+Compiled successfully!
+
+You can now view app in the browser.
+
+  Local:            http://localhost:3000
+  On Your Network:  http://192.168.0.105:3000
+
+Note that the development build is not optimized.
+To create a production build, use npm run build.
+```
+And the localhost on your browser looks like the following:
+
+![reactlaunched](/img/reactlaunched.png)
+
+
+The docker file must then be re-created to contain the following:
+
+```
+# pull the base image
+FROM node:alpine
+# set the working direction
+WORKDIR /app
+# add `/app/node_modules/.bin` to $PATH
+ENV PATH /app/node_modules/.bin:$PATH
+# install app dependencies
+COPY package.json ./
+COPY package-lock.json ./
+RUN npm install
+# add app
+COPY . ./
+# start app
+CMD ["npm", "start"]
+```
+Then we can add the following to our .dockerignore file:
+
+```
+node_modules
+npm-debug.log
+build
+.dockerignore
+**/.git
+**/.DS_Store
+**/node_modules
+```
+
+Finally, we can run the following in our base directory:
+
+```
+$ docker build -t ps-container:dev .
+```
+This tags a different image that what we had been building above, ps-container:dev
+
+```
+sudo docker run -it --rm \
+-v ${PWD}:/app \
+-v /app/node_modules \
+-p 3001:3000 \
+-e CHOKIDAR_USEPOLLING=true \
+ps-container:dev
+```
+However now we are confronted with a new error:
+
+```
+sh: react-scripts: not found
+```
+Within the overall React project structure, react-scripts appears to be within /app/node_modules/react-scripts, a folder as shown below:
+
+![](/img/react-scrpts.png)
+
+These are evidently not getting copied over within the Dockerfile process, perhaps because the working directory is incorrect, or perhaps because node_modules is in our .dockerignore file.
+
+We can start out by changing our working directory:
+
+```
+WORKDIR /
+```
+Once we changed the working directory, we get the following success message, as though we were running the app outside of a container:
+
+```
+Compiled successfully!
+
+You can now view app in the browser.
+
+  Local:            http://localhost:3000
+  On Your Network:  http://172.17.0.2:3000
+
+Note that the development build is not optimized.
+To create a production build, use npm run build.
+
+```
+So now, if we visit "http://localhost:3001/" we see our react running.
+
+Presumably this is being hosted within the actual docker process. We could test by killing the docker process and seeing if the localhost:3001 will still load.
+
+First, we see that we have the following container running, with, "sudo docker ps -all":
+
+```
+CONTAINER ID   IMAGE              COMMAND                  CREATED         STATUS         PORTS                                       NAMES
+b2ebde5c0a1a   ps-container:dev   "docker-entrypoint.s…"   3 minutes ago   Up 2 minutes   0.0.0.0:3001->3000/tcp, :::3001->3000/tcp   lucid_pascal
+```
+And indeed, when we run, "sudo docker stop <CONTAINER ID>" on this, the app crashes! It's alive!
+
+5. A.) Hot Fixes
+
+The section which is supposed to allow us to update the application after building the application is:
+
+```
+-e CHOKIDAR_USEPOLLING=true \
+```
+However
+
+
+[//]: <> (..........SECTION..........)
+
 
 6. If you want to use docker-compose...create docker-compose yml file.
 
@@ -184,3 +319,7 @@ docker-compose -f docker-compose.prod.yml up -d --build
 
 1. [Using React and Node](https://www.simform.com/use-nodejs-with-react/)
 2. [Dockerizing a React App](https://mherman.org/blog/dockerizing-a-react-app/)
+3. [Using React with Docker](https://www.pluralsight.com/guides/using-react.js-with-docker) <--- Used to get started.
+4. [NPX Package Runner](https://medium.com/@maybekatz/introducing-npx-an-npm-package-runner-55f7d4bd282b)
+5. [Creating a React App](https://create-react-app.dev/docs/deployment/)
+6. [Docker Create react app hot reload not working](https://stackoverflow.com/questions/58508772/docker-create-react-app-hot-reload-not-working)

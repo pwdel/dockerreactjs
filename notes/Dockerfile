@@ -13,6 +13,9 @@ RUN npm install react-scripts@3.4.1 -g
 COPY package.json ./
 COPY package-lock.json ./
 
+# attempt to delete node_modules directory
+
+
 # add app
 COPY . ./
 

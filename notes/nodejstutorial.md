@@ -29,6 +29,8 @@ $ node main.js
 ```
 This very simply creates an app at localhost:8080 which says, "Hello World!"
 
+This has been stored in [main.js](/notes/main.js).
+
 
 
 
