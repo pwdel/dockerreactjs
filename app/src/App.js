@@ -1,20 +1,19 @@
-import logo from './logo.svg';
-import bluecircle from './bluecircle.svg';
-import './App.css';
+// App.js
+import React from 'react';
+import { ThemeProvider } from 'styled-components';
+import { GlobalStyles } from './global';
+import { theme } from './theme';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={bluecircle} className="App-logo" alt="logo" />
-        <p>
-          Hold
-        </p>
-      </header>
-      <body>
-      </body>
-    </div>
+    <ThemeProvider theme={theme}>
+      <>
+        <GlobalStyles />
+        <div>
+          <h1>Hello. This is burger menu tutorial</h1>
+        </div>
+      </>
+    </ThemeProvider>
   );
 }
-
 export default App;
