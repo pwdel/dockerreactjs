@@ -2,7 +2,7 @@
 
 * Docker
 
-# Quick Install
+# Quick Install - Docker Version
 
 1. With terminal, navigate to "/app" - the folder with Dockerfile in it.
 2. Run in the '/app' directory:
@@ -20,4 +20,11 @@ sudo docker run -it --rm \
 -p 3001:3000 \
 -e CHOKIDAR_USEPOLLING=true \
 ps-container:dev
+```
+# Running React Only
+
+To run the react app only, without docker, navigate to the /app file and enter:
+
+```
+$ npm start
 ```
