@@ -5,6 +5,10 @@ import { GlobalStyles } from './global';
 import { theme } from './theme';
 import { Burger, Menu } from './components';
 import FocusLock from 'react-focus-lock';
+// import for routing
+import { Route, Switch } from 'react-router-dom'
+import Rating from './pages/rating'
+import Home from './pages/home'
 
 function App() {
   const [open, setOpen] = useState(false);
@@ -24,9 +28,11 @@ function App() {
           </FocusLock>
         </div>
         <div>
-          <h1>Hello. This is burger menu tutorial</h1>
-          <img src="https://image.flaticon.com/icons/svg/2016/2016012.svg" alt="burger icon" />
-          <small>Icon made by <a href="https://www.freepik.com/home">Freepik</a> from <a href="https://www.flaticon.com">www.flaticon.com</a></small>
+          <Route exact path='/rating' component={Rating} />
+          <Route exact path='/' component={Home} />
+        </div>
+        <div>
+          <small><a>Created by Patrick Delaney</a></small>
         </div>
 
       </>
