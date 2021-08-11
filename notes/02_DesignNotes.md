@@ -194,6 +194,113 @@ then restart the application, and it works.
 
 #### Creating Burger Menu and Components
 
+1. Create a "Components" folder inside of /src.
+2. Put a Buger and Menu folder in that folder as well as index.js.
+
+> index.js will be used for one purpose: allow us to import components from one file, which is very handy, especially when you have a lot of them.
+
+In index.js we put:
+
+```
+// index.js
+export { default } from './Burger';
+```
+3. Create [Burger.styled.js](/app/src/components/Burger/Burger.styled.js).  In this file we put styling components relating to what the little menu itself will look like. It's a defined button with children of defined height and width, essentially.
+
+> side note - The transform-origin property will be needed later to animate the menu it toggles between open and closed states.
+
+
+4. Create burger.js for the layout in the Burger folder.
+
+Within burger.js we have the following, to import the StyledBurger:
+
+```
+// Burger.js
+import React from 'react';
+import { StyledBurger } from './Burger.styled';
+
+const Burger = () => {
+  return (
+    <StyledBurger>
+      <div />
+      <div />
+      <div />
+    </StyledBurger>
+  )
+}
+
+export default Burger;
+```
+
+5. Finally, got to Burger.js and add:
+
+```
+// Burger.js
+import React from 'react';
+import { StyledBurger } from './Burger.styled';
+
+const Burger = () => {
+  return (
+    <StyledBurger>
+      <div />
+      <div />
+      <div />
+    </StyledBurger>
+  )
+}
+
+export default Burger;
+```
+After performing the above, we don't see a menu yet, but it appears we have to perform the same for, "Menu" - creating a /Menu/index.js, Menu.js and Menu.styled.js.
+
+After completing this we get the following:
+
+```
+./src/components/Menu/index.js
+Attempted import error: 'default' is not exported from './Menu'.
+```
+
+It appears that the wrong code, the Menu.styled.js code was copied into the Menu.js file, rather than the actual Menu.js application.
+
+After clearing this hurdle we see the following outputs on the terminal/processor:
+
+```
+src/App.js
+  Line 7:10:  'Burger' is defined but never used  no-unused-vars
+  Line 7:18:  'Menu' is defined but never used    no-unused-vars
+```
+
+After much debugging, the key missing component was an installable package:
+
+```
+$ npm install react-focus-lock
+```
+
+[react-focus-lock](https://github.com/theKashey/react-focus-lock)
+
+Which is evidently a package that brings certain items on a page up to Mozilla specification.
+
+Other dependencies based upon what we have built include (from package.json):
+
+```
+"@testing-library/jest-dom": "^5.14.1",
+"@testing-library/react": "^11.2.7",
+"@testing-library/user-event": "^12.8.3",
+"react": "^17.0.2",
+"react-dom": "^17.0.2",
+"react-focus-lock": "^2.5.2",
+"react-scripts": "4.0.3",
+"styled-components": "^5.3.0",
+"web-vitals": "^1.1.2"
+```
+When we build from our Docker image, these should all be installed.
+
+After we have built this we see the following two available burger menu pages:
+
+![burgermenumain.png](/img/burgermenumain.png)
+
+![burgermenumenu](/img/burgermenumenu.png)
+
 ### Creating Three Different Page Layouts
 
 
