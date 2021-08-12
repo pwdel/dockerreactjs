@@ -470,23 +470,39 @@ import { styled } from 'styled-components';
 
 2. There are multiple ways to create the actual component within global.js per this [stackoverflow answer](https://stackoverflow.com/questions/62241217/styling-reactcomponent-svg-with-styledcomponents).
 
+When we try to create a component, we get the following error:
+
+```
+./src/global.js
+Attempted import error: 'styled' is not exported from 'styled-components'.
+```
+What it turns out is, we have to add the style directly to the page - not to the global stylesheet. Styles can be added to a global, to individual pages or to components.
+
+So within "/pages/rating.js"
+
+```
+// import styles
+import styled from 'styled-components';
+
+...
+```
+and on a new file... rating.styled.js:
+
+```
+import styled from 'styled-components';
+// import svg and name as icon
+import { ReactComponent as Icon } from "../img/bluecircle.svg";
+
+// add additional styling elements, giving them variable names
+
+```
+
+Then, within the actual rating.js file:
 
 
 
 
-### Creating Three Different Page Layouts
 
-
-
-### Switching Page Layouts Based Upon Button
-
-
-### Modifying Favicon
-
-
-### reportWebVitals.js
-
-### setupTests.js
 
 
 # References
@@ -499,6 +515,7 @@ import { styled } from 'styled-components';
 * [Creating a Single Page Application Using React](https://www.creative-tim.com/blog/react/create-single-page-application-using-react/)
 * [How to Use Styled Components](https://blog.logrocket.com/how-to-use-styled-components-with-react-native/)
 * [Styling React Components](https://stackoverflow.com/questions/62241217/styling-reactcomponent-svg-with-styledcomponents)
+* [Responsive SVGs](https://blog.logrocket.com/make-any-svg-responsive-with-this-react-component/)
 
 ## Wrong, Misleading or Poorly Created Tutorials
 
