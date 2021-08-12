@@ -301,18 +301,207 @@ After we have built this we see the following two available burger menu pages:
 
 ![burgermenumenu](/img/burgermenumenu.png)
 
-### Creating Three Different Page Layouts
+### Customizing the Burger Menu
+
+#### Customizing the Menu Itself
+
+The, "StyledMenu" is kept in [Menu.js](/app/src/components/Menu/Menu.js).  
+
+Actual menu items may be changed in this file.
+
+```
+return (
+  <StyledMenu open={open} aria-hidden={!isHidden} {...props}>
+    <a href="/" tabIndex={tabIndex}>
+      <span aria-hidden="true">🏠</span>
+      Home
+    </a>
+    <a href="/" tabIndex={tabIndex}>
+      <span aria-hidden="true">💵</span>
+      Rating
+      </a>
+  </StyledMenu>
+)
+```
+
+Links to pages can be added after href, but routes must be added for them to work.
+
+#### Adding Additional Routes
+
+In React, there are multiple ways to create new pages:
+
+* Single page application.
+* Multiple page application.
+
+This may become important in the future, as for example if an API endpoint is desired, then we may need an actual page endpoint, whereas if information just needs to be displayed, this may need to be a single page application.
+
+##### Single Page App with React Router
+
+0. We need to install react-router-dom within the /app folder (so that it gets added to package.json):
+
+```
+$ npm install react-router-dom
+```
+
+1. There are two types of React routers, BrowserRouter (makes URLs like example.com/about) and HashRouter (makes URLs like example.com/#/about). We are using BrowserRouter in this example and use it to wrap the App component.
+
+Within /src/index.js import the following two new items, [render](https://reactjs.org/docs/react-dom.html#render):
+
+```
+// imports for routing single page application
+import { render } from 'react-dom';
+import { BrowserRouter } from 'react-router-dom'
+```
+Then within ReactDOM.render() we add BrowserRouter:
+
+```
+ReactDOM.render(
+  <React.StrictMode>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </React.StrictMode>,
+  document.getElementById('root')
+);
+```
+
+2. Create a /app/src/pages folder and add our new page, "rating":
+
+```
+import React from “react”;
+
+export default function Rating() {
+
+  return (
+    <>
+    <h1>Rating</h1>
+    <p>Here is where the rating goes.</p>
+    </>
+  );
+
+}
+```
+
+3. Create any other pages desired in src/pages.
+
+4. Decide and incorporate the routers that you want to use using [Switch](https://reactrouter.com/web/api/Switch) and [Route](https://reactrouter.com/web/api/Route). Switch groups all routes together and ensures that they take the precedence from top-to-bottom. Route, on the other hand, defines individual routes.
+
+The App.js file should use the decided routes.
+
+Add the following imports new items to App.js:
+
+```
+import { Route, Switch } from 'react-router-dom'
+
+```
+Then add the following to the app page:
+
+```
+<Switch>
+
+  <Route exact path=”/” component={HomePage} />
+
+  <Route exact path='/rating' component={Rating} />
+
+</Switch>
+```
+Note that merely having this within the app allows the menu we have built eariler to understand our routing. Unlike Ruby on Rails, which seems to be opinionated about where routes go in terms of project structure, the routes can just be placed as instructions within the app code itself.
+
+Also note that on the rating page, our, "main application" language kept within App.js will stay on the page, until we create another specific route for this.  Therefore we can remove the extra, non-needed information:
+
+```
+<h1>Hello. Welcome to the $FCNTX Rating tool.</h1>
+```
+
+...and we can place it on its own page.
 
 
-### Switching Page Layouts Based Upon Button
+##### Creating Additional Pages with React Router
 
+This was accomplished above.
 
-### Modifying Favicon
+#### Customizing the Home Page
 
+This can be done by customizing the individual '/src/pages.home.js' file.
 
-### reportWebVitals.js
+#### Customizing the Rating Page
 
-### setupTests.js
+Now, since the, "pages" and "img" folder are parallel to each other, we have to use ".." to denote the relative path rather than "."
+
+```
+import bluecircle from '../img/bluecircle.svg';
+```
+Then the following gets added to the return function:
+
+```
+<img src={bluecircle} className="App-recommend" alt="hold" />
+```
+
+#### Customizing the Style
+
+##### Merge Global Styles with Previous Desired Styles
+
+The new style sheet is global.js:
+
+* [global.js](/src/global.js)
+
+The old stylesheet was:
+
+* [App.css](/notes/Previous/App.css)
+
+Basically, we can take all of the styles we need from App.css and copy them into global.js.
+
+Note that the file global.js must end with the italicized tick mark.
+
+The way styles are created is with [Styled Components])(https://styled-components.com/docs/api).
+
+##### Using Styled Components
+
+[Using this tutorial](https://blog.logrocket.com/how-to-use-styled-components-with-react-native/)
+
+This also deals with creating pressable buttons.
+
+1. Import:
+
+```
+import { styled } from 'styled-components';
+```
+[styled](https://styled-components.com/docs/api#styled) is the default export.
+
+2. There are multiple ways to create the actual component within global.js per this [stackoverflow answer](https://stackoverflow.com/questions/62241217/styling-reactcomponent-svg-with-styledcomponents).
+
+When we try to create a component, we get the following error:
+
+```
+./src/global.js
+Attempted import error: 'styled' is not exported from 'styled-components'.
+```
+What it turns out is, we have to add the style directly to the page - not to the global stylesheet. Styles can be added to a global, to individual pages or to components.
+
+So within "/pages/rating.js"
+
+```
+// import styles
+import styled from 'styled-components';
+
+...
+```
+and on a new file... rating.styled.js:
+
+```
+import styled from 'styled-components';
+// import svg and name as icon
+import { ReactComponent as Icon } from "../img/bluecircle.svg";
+
+// add additional styling elements, giving them variable names
+
+```
+
+Then, within the actual rating.js file we attempt to import the svg.
+
+After working with styled components for a while and trying to understand how to use it to manipulate SVGs, it turns out that there is a simpler way to work with SVGs in React - that essentially react has native SVG support as well as a command line way of creating them as components.
+
+This will be covered in: [06_SVGsInReact.md](/notes/06_SVGsInReact.md).
 
 
 # References
@@ -320,3 +509,13 @@ After we have built this we see the following two available burger menu pages:
 * [Creating Multi Page Website React](https://www.techomoro.com/how-to-create-a-multi-page-website-with-react-in-5-minutes/) - notes on where routes and sofourth are kept.
 * [Creating a Hamburger Menu](https://css-tricks.com/hamburger-menu-with-a-side-of-react-hooks-and-styled-components/)
 * [Hamburger Menu Github](https://github.com/maximakymenko/react-burger-menu-article-app/tree/master/src)
+* [Creating Multiple Pages with React Router - Stackexchange](https://stackoverflow.com/questions/41956465/how-to-create-multiple-page-app-using-react)
+* [How to handle additional Routes with React Router -Digital Ocean](https://www.digitalocean.com/community/tutorials/how-to-handle-routing-in-react-apps-with-react-router)
+* [Creating a Single Page Application Using React](https://www.creative-tim.com/blog/react/create-single-page-application-using-react/)
+* [How to Use Styled Components](https://blog.logrocket.com/how-to-use-styled-components-with-react-native/)
+* [Styling React Components](https://stackoverflow.com/questions/62241217/styling-reactcomponent-svg-with-styledcomponents)
+* [Responsive SVGs](https://blog.logrocket.com/make-any-svg-responsive-with-this-react-component/)
+
+## Wrong, Misleading or Poorly Created Tutorials
+
+* [Single Page App with React Router](https://www.split.io/blog/react-router-feature-flags/) -- used [This repo](https://github.com/talianassi921/react-router-app) to follow along and create the below. Note! This is not actually a single page application, but rather a routed page which the tutorial called a single page application.

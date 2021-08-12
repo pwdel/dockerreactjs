@@ -23,11 +23,6 @@ export const GlobalStyles = createGlobalStyle`
     text-align: center;
     text-transform: uppercase;
   }
-  img {
-    border-radius: 5px;
-    height: auto;
-    width: 10rem;
-  }
   div {
     text-align: center;
   }
@@ -38,4 +33,9 @@ export const GlobalStyles = createGlobalStyle`
     color: ${({ theme }) => theme.primaryHover};
     text-decoration: none;
   }
-`
+  indicator {
+    height: 50vmin;
+    pointer-events: none;
+  }
+
+`;

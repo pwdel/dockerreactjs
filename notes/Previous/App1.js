@@ -1,7 +1,6 @@
-import logo from './logo.svg';
-import bluecircle from './bluecircle.svg';
-import reddownarrow from './reddownarrow.svg';
-import greenuparrow from './greenuparrow.svg';
+import bluecircle from './img/bluecircle.svg';
+import reddownarrow from './img/reddownarrow.svg';
+import greenuparrow from './img/greenuparrow.svg';
 import './App.css';
 
 function App() {
@@ -15,6 +14,8 @@ function App() {
           Hold
         </p>
       </header>
+    </div>
+    <div>
       <body>
       </body>
     </div>
