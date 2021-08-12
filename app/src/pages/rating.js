@@ -1,26 +1,17 @@
 import React from 'react';
-// import styles
-import { IconWrapper,StyledIcon,IconWrapperTargetClassname  } from './rating.styled';
 // import images
-import bluecircle from '../img/bluecircle.svg';
+import bluecircle from '../icons/bluecircle.svg';
 // import reddownarrow from './img/reddownarrow.svg';
+import IndicatorCircle from '../iconComponents/bluecirclesvg';
 // import greenuparrow from './img/greenuparrow.svg';
 
 
 export default function Rating() {
 
   return (
-    <>
       <div>
-        <IconWrapperTargetClassname>
-          <StyledIcon>
-            <IconWrapper>
-              <img src={bluecircle} alt="hold" />
-            </IconWrapper>
-          </StyledIcon>
-        </IconWrapperTargetClassname>
+        <IndicatorCircle width={350} height={'auto'} />
       </div>
-    </>
   );
 
 }

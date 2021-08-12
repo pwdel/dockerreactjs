@@ -497,12 +497,11 @@ import { ReactComponent as Icon } from "../img/bluecircle.svg";
 
 ```
 
-Then, within the actual rating.js file:
+Then, within the actual rating.js file we attempt to import the svg.
 
+After working with styled components for a while and trying to understand how to use it to manipulate SVGs, it turns out that there is a simpler way to work with SVGs in React - that essentially react has native SVG support as well as a command line way of creating them as components.
 
-
-
-
+This will be covered in: [06_SVGsInReact.md](/notes/06_SVGsInReact.md).
 
 
 # References
