@@ -6,9 +6,9 @@ import SvgReddownarrow from '../iconComponents/Reddownarrow.js';
 import SvgGreenuparrow from '../iconComponents/Greenuparrow.js';
 
 const indicatorIcons = [
-  require(SvgBluecircle),
-  require(SvgReddownarrow),
-  require(SvgGreenuparrow),
+  SvgBluecircle,
+  SvgReddownarrow,
+  SvgGreenuparrow,
 ];
 
 export default indicatorIcons;

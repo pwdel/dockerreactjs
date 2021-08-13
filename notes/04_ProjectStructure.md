@@ -1,6 +1,8 @@
+## Project Structure Philosophies
+
 https://reactjs.org/docs/faq-structure.html
 
-Grouping by features or routes
+### Grouping by features or routes
 
 common/
   Avatar.js
@@ -22,7 +24,7 @@ profile/
   ProfileAPI.js
 
 
-Grouping by file type
+### Grouping by file type
 
   api/
     APIUtils.js
