@@ -6,7 +6,7 @@ import { theme } from './theme';
 import { Burger, Menu } from './components';
 import FocusLock from 'react-focus-lock';
 // import for routing
-import { Route, Switch } from 'react-router-dom'
+import { Route } from 'react-router-dom'
 import Rating from './pages/rating'
 import Home from './pages/home'
 

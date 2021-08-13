@@ -73,20 +73,90 @@ This can then be couched within the Style we created in the rating.js default fu
 
 After some of the modifications made in [06_SVGsInReact.md](/notes/06_SVGsInReact.md), the function may be changed and added to rating.js:
 
+Therefore, displaying images randomly doesn't work because now we're attempting to display actual objects, essentially svg component objects rather than a .png or .jpg.
 
+First, we can generate a random value with the following function:
 
+```
+// helper function to select random value
+function displayRandom() {
+  // array to represent 3 different components
+  let arr = [0, 1, 2];
+  // roudn down to random number times array length
+  let random = Math.floor(Math.random() * arr.length);
 
-### Switching Page Layouts Based Upon Button
+  return random
+}
+```
+Attempting to put objects into an array directly no longer works. So basically the following was found on YouTube:
 
+[React.js - How to Dynamically Load Components Based on Selection - YouTube](https://www.youtube.com/watch?v=Qqgm170PZwk)
 
-### Modifying Favicon
+So one thing we can do is import not just one component at a time but several:
 
+```
+// import indicatoricons.js
+import * as Indicators from '../iconComponents';
+```
+If we log, "Indicators" to console and take a look at the output, we get:
 
-### reportWebVitals.js
+```
+Indicators:  
+Object { Bluecircle: Getter, Greenuparrow: Getter, Reddownarrow: Getter, … }
+​
+Bluecircle:
+​
+Greenuparrow:
+​
+Reddownarrow:
+​
+__esModule: true
+​
+Symbol(Symbol.toStringTag): "Module"
+​
+<get Bluecircle()>: function js()​
+<get Greenuparrow()>: function js()​
+<get Reddownarrow()>: function js()​
+<prototype>: Object { … }
+```
+Which basically shows that we are importing an object with a list of other objects with, "Getters," which evidently point to a function.
 
-### setupTests.js
+However, it seems that for some reason, we can't easily pass a component that may have been a function and access it as an object.  There may be an easier way to do this, but for now, it does not seem to render and we do not seem to be able to access the component.
+
+Instead, we can try a different approach, which is to use an if statement within the overall function, which returns a given SVG based upon the input:
+
+```
+// exported function, Rating() which displays the overall rating
+export default function Rating() {
+  // set up random variable
+  let random = displayRandom()
+  // put Indicators, which is an object, into array so we can use map
+  if (random==0) {
+    return (
+        <div>
+          <SvgBluecircle width="350" height="auto" />
+        </div>
+    );
+  } else if (random == 1) {
+    return (
+        <div>
+          <SvgReddownarrow width="350" height="auto" />
+        </div>
+    );
+  } else if (random == 2){
+    return (
+        <div>
+          <SvgGreenuparrow width="350" height="auto" />
+        </div>
+    );
+  }
+
+```
+
+The above displays a random recommendation SVG as well as whatever text gets defined in the div.
 
 ## References
 
-[Codepen Example](https://codepen.io/Ruegen/pen/oYpEbm)
-[Randomly Select Images from Array](https://stackoverflow.com/questions/59805808/randomly-select-images-from-a-an-array-in-react-native)
+* [Codepen Example](https://codepen.io/Ruegen/pen/oYpEbm)
+* [Randomly Select Images from Array](https://stackoverflow.com/questions/59805808/randomly-select-images-from-a-an-array-in-react-native)
+* [React.js - How to Dynamically Load Components Based on Selection - YouTube](https://www.youtube.com/watch?v=Qqgm170PZwk)

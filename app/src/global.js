@@ -19,7 +19,7 @@ export const GlobalStyles = createGlobalStyle`
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   }
   h1 {
-    font-size: 2rem;
+    font-size: 4rem;
     text-align: center;
     text-transform: uppercase;
   }
