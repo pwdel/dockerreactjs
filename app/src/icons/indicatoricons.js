@@ -1,11 +1,14 @@
-import bluecircle from '../icons/bluecircle.svg';
-import reddownarrow from '../icons/reddownarrow.svg';
-import greenuparrow from '../icons/greenuparrow.svg';
+// import images - blue circle indicator
+import SvgBluecircle from '../iconComponents/Bluecircle.js';
+// import reddownarrow from './img/reddownarrow.svg';
+import SvgReddownarrow from '../iconComponents/Reddownarrow.js';
+// import greenuparrow from './img/greenuparrow.svg';
+import SvgGreenuparrow from '../iconComponents/Greenuparrow.js';
 
-const indicatorImages = [
-  require(bluecircle),
-  require(reddownarrow),
-  require(greenuparrow),
+const indicatorIcons = [
+  require(SvgBluecircle),
+  require(SvgReddownarrow),
+  require(SvgGreenuparrow),
 ];
 
-export default indicatorImages;
+export default indicatorIcons;
