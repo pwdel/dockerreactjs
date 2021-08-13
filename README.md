@@ -34,3 +34,8 @@ $ npm start
 [morning-escarpment-67260.herokuapp.com](https://morning-escarpment-67260.herokuapp.com/)
 
 # Images
+
+
+# Notes
+
+Prodution build was not used on the Demo Deployment, only dev build.
