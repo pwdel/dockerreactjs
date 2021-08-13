@@ -71,6 +71,10 @@ function Indicate() {
 ```
 This can then be couched within the Style we created in the rating.js default function.
 
+After some of the modifications made in [06_SVGsInReact.md](/notes/06_SVGsInReact.md), the function may be changed and added to rating.js:
+
+
+
 
 ### Switching Page Layouts Based Upon Button
 
