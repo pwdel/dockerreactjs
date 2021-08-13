@@ -28,3 +28,9 @@ To run the react app only, without docker, navigate to the /app file and enter:
 ```
 $ npm start
 ```
+
+# Demo Deployment:
+
+[morning-escarpment-67260.herokuapp.com](https://morning-escarpment-67260.herokuapp.com/)
+
+# Images
